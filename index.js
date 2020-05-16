@@ -34,6 +34,19 @@ const url3 = `https://en.wikiquote.org/wiki/Rick_and_Morty`;
       });
       return arr;
     });
+  
+    await page.goto(url3);
+    await page.waitForSelector("#mw-content-text");
+
+    var quotes3 = await page.evaluate(() => {
+      var quoteNodes = document.querySelectorAll(`dl`);
+      var arr = [];
+      const regex = /“|”/gi;
+      quoteNodes.forEach((node) => {
+        arr.push({ quote: node.innerText.replace(regex, "").trim() });
+      });
+      return arr;
+    });
 
     await page.goto(url2);
 
@@ -54,21 +67,6 @@ const url3 = `https://en.wikiquote.org/wiki/Rick_and_Morty`;
       });
       return arr;
     });
-
-    
-    await page.goto(url3);
-    await page.waitForSelector("#mw-content-text");
-
-    var quotes3 = await page.evaluate(() => {
-      var quoteNodes = document.querySelectorAll(`dl`);
-      var arr = [];
-      const regex = /“|”/gi;
-      quoteNodes.forEach((node) => {
-        arr.push({ quote: node.innerText.replace(regex, "").trim() });
-      });
-      return arr;
-    });
-
     await browser.close();
 
     // COMBINE AND CLEANUP
@@ -108,7 +106,7 @@ async function autoScroll(page) {
           clearInterval(timer);
           resolve();
         }
-      }, 100);
+      }, 400);
     });
   });
 }
