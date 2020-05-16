@@ -5,6 +5,10 @@ var fs = require("fs");
 const error = chalk.bold.red;
 const success = chalk.keyword("green");
 
+const url1 = `https://www.needsomefun.net/best-100-rick-and-morty-quotes/`;
+const url2 = `https://quotecatalog.com/quotes/tv/rick-and-morty/`;
+const url3 = `https://en.wikiquote.org/wiki/Rick_and_Morty`;
+
 (async () => {
   try {
     // open the headless browser
@@ -13,7 +17,7 @@ const success = chalk.keyword("green");
     var page = await browser.newPage();
     // enter url in page
     await page.goto(
-      `https://www.needsomefun.net/best-100-rick-and-morty-quotes/`
+      url1
     );
     await page.waitForSelector("#post-53789");
 
@@ -30,9 +34,9 @@ const success = chalk.keyword("green");
       });
       return arr;
     });
-    await page.goto(`https://quotecatalog.com/quotes/tv/rick-and-morty/`);
 
-    // await page.waitForSelector("#inf-container");
+    await page.goto(url2);
+
     await page.setViewport({
       width: 1200,
       height: 800,
@@ -51,7 +55,8 @@ const success = chalk.keyword("green");
       return arr;
     });
 
-    await page.goto(`https://en.wikiquote.org/wiki/Rick_and_Morty`);
+    
+    await page.goto(url3);
     await page.waitForSelector("#mw-content-text");
 
     var quotes3 = await page.evaluate(() => {
@@ -85,7 +90,7 @@ const success = chalk.keyword("green");
     // Catch and display errors
     console.log(error(err));
     await browser.close();
-    console.log(error("Browser Closed"));
+    console.log(error(`Browser Closed. Quotes could not be gathered :( ${err}`));
   }
 })();
 
