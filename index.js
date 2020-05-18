@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const chalk = require("chalk");
+const autoScroll = require("./helpers").autoScroll;
 var fs = require("fs");
 // MY OCD of colorful console.logs for debugging... IT HELPS
 const error = chalk.bold.red;
@@ -78,7 +79,7 @@ const url3 = `https://en.wikiquote.org/wiki/Rick_and_Morty`;
     );
     // Writing the quotes inside a json file
 
-    fs.writeFile("quotes.json", JSON.stringify(cleaned), function (err) {
+    fs.writeFile("quotes2.json", JSON.stringify(cleaned), function (err) {
       if (err) throw err;
 
       console.log(success(`${cleaned.length} quotes saved!`));
@@ -92,21 +93,3 @@ const url3 = `https://en.wikiquote.org/wiki/Rick_and_Morty`;
   }
 })();
 
-async function autoScroll(page) {
-  await page.evaluate(async () => {
-    await new Promise((resolve, reject) => {
-      var totalHeight = 0;
-      var distance = 100;
-      var timer = setInterval(() => {
-        var scrollHeight = document.body.scrollHeight;
-        window.scrollBy(0, distance);
-        totalHeight += distance;
-
-        if (totalHeight >= scrollHeight) {
-          clearInterval(timer);
-          resolve();
-        }
-      }, 400);
-    });
-  });
-}
